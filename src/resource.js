@@ -144,13 +144,15 @@ eResource.factory('resource-api', [
     }
     function syncResourcesWithCache(collection) {
       collection.resources.forEach(function(resource, index, resources) {
-        var storedResource = cache.retrieve(resource.$path);
-        if (storedResource) {
-          resources[index] = storedResource;
-          storedResource.$extend(resource);
-        } else {
-          cache.store(resource);
-        }
+        resource.$promise.then(function() {
+          var storedResource = cache.retrieve(resource.$path);
+          if (storedResource) {
+            resources[index] = storedResource;
+            storedResource.$extend(resource);
+          } else {
+            cache.store(resource);
+          }
+        });
       });
       return collection;
     };

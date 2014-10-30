@@ -278,7 +278,9 @@ describe('epixa-resource', function() {
           return data;
         });
         initSpy = jasmine.createSpy('initializer').andCallFake(function(resource) {
-          resource.initialized = true;
+          resource.$promise.then(function() {
+            resource.initialized = true;
+          })
         });
         pathfinderSpy = jasmine.createSpy('pathfinder').andCallFake(function(collectionPath, entity) {
           return collectionPath + '/' + entity.id;
